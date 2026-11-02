@@ -1,0 +1,221 @@
+You are a senior full-stack engineer, network automation engineer, and UI/UX designer. Build a complete, production-oriented ISP management system called NetConnect.
+
+Work directly in my project. First inspect the existing files, database structure, dependencies, and project instructions. Preserve useful existing functionality and follow the established stack. If the project is empty, use PHP 8.2+, MySQL 8+, Bootstrap 5, and JavaScript, compatible with XAMPP. Use Composer where appropriate.
+
+Do the implementation, not just a plan or sample screens. Make reasonable implementation decisions and continue without asking routine questions. Never claim a feature works unless it has been implemented and verified. Clearly document integrations that require my credentials or equipment.
+
+BUSINESS CONTEXT
+NetConnect is an ISP management platform for a Kenyan internet provider.
+- Currency: KES.
+- Timezone: Africa/Nairobi.
+- Phone numbers: support Kenyan numbers and normalize to international format.
+- Payments: M-Pesa Daraja, with a sandbox mode.
+- Network: provide a MikroTik RouterOS integration adapter and an extensible interface for other vendors.
+- Support prepaid subscriptions first; structure billing to support postpaid accounts.
+- Make the application responsive for desktop, tablet, and mobile.
+
+USER EXPERIENCE
+Create a polished, consistent interface with clear navigation, accessible forms, useful empty states, loading indicators, validation, search, filtering, pagination, and confirmation for destructive actions.
+
+Use a professional navy, blue, teal, and white visual identity with optional dark mode. Keep operational screens practical and readable. Use real database records; seed demonstration data separately and label it clearly.
+
+ROLES AND PERMISSIONS
+Implement server-enforced permissions for:
+1. Super administrator.
+2. Administrator.
+3. Finance.
+4. Customer support.
+5. Technician.
+6. Network operator.
+7. Customer.
+
+Customers must only access their own records. Technicians must only access permitted work orders and customer information. Enforce authorization on every relevant endpoint, not only in the UI.
+
+REQUIRED MODULES
+
+1. AUTHENTICATION AND STAFF
+- Customer registration and secure login using phone or email.
+- Staff accounts, roles, and granular permissions.
+- Password reset using expiring, single-use tokens.
+- Login rate limiting, secure sessions, and staff MFA.
+- Profile management and audit logs.
+- Provide a secure CLI or setup process for creating the first administrator; no hard-coded default credentials.
+
+2. CUSTOMERS AND CONNECTIONS
+- Customer account numbers, contact details, service addresses, GPS coordinates, and installation notes.
+- Multiple service connections per customer.
+- Separate account, installation, subscription, and network access statuses.
+- Assigned packages, equipment, and network identifiers.
+- Customer history showing payments, subscriptions, tickets, and work orders.
+- Searchable customer directory with filters and export.
+
+3. COVERAGE
+- Leaflet coverage map and customer location picker.
+- Coverage areas using circles or polygons.
+- Packages available per area.
+- Coverage enquiry records and technician feasibility checks.
+- Distinguish potential coverage from confirmed installation availability.
+
+4. PACKAGES AND SUBSCRIPTIONS
+- Package name, download/upload speeds, price, duration, data allowance, and fair usage terms.
+- Installation charges, equipment charges, discounts, and promotions.
+- Renewals, upgrades, downgrades, cancellations, and scheduled package changes.
+- Preserve historical prices and subscription terms.
+- Define and document renewal rules for active and expired subscriptions.
+- Display subscription time remaining separately from measured data usage.
+
+5. BILLING
+- Invoices, invoice items, due dates, receipts, and account statements.
+- Partial payments, overpayments, customer credits, and outstanding balances.
+- Manual payment recording with permissions and audit history.
+- Refund workflow with approval controls and transaction records.
+- Use decimal-safe money calculations; never floating-point arithmetic for financial totals.
+- Unique invoice, receipt, and transaction references.
+- Distinguish invoiced revenue from collected payments.
+
+6. M-PESA
+- Daraja STK Push initiation and payment status handling.
+- Server-side validation of callbacks and transaction details.
+- Idempotent callback processing and unique transaction constraints.
+- Handle pending, successful, failed, cancelled, and timed-out requests.
+- Reconcile payments with invoices and customer accounts.
+- Store unmatched payments for finance review.
+- Prevent duplicate callbacks from creating duplicate payments or renewals.
+- Keep secrets outside source control.
+- Provide sandbox setup instructions and clearly identify any live configuration required.
+
+7. NETWORK PROVISIONING
+- An extensible network-provider interface.
+- MikroTik integration for supported PPPoE or hotspot provisioning.
+- Create and update customer access credentials and package profiles.
+- Activate, suspend, reconnect, and reconcile service state.
+- Track provisioning attempts, failures, retries, and administrator overrides.
+- Separate desired service state from confirmed router state.
+- Payments must remain recorded even if network activation fails.
+- Use queued jobs for network actions with bounded retries.
+- Provide a clearly labelled simulation adapter for local development.
+- Do not run changes against real network equipment without explicit operator configuration.
+
+8. CUSTOMER PORTAL
+- Dashboard with package, subscription validity, balance, and service status.
+- Renewals and M-Pesa payment.
+- Invoices, receipts, statements, and payment history.
+- Package change requests.
+- Support tickets and installation updates.
+- Outage announcements.
+- Profile and notification preferences.
+- Only display bandwidth or consumption figures when real accounting data exists; otherwise show that measurement is unavailable.
+
+9. INSTALLATIONS AND TECHNICIANS
+- Installation requests, feasibility checks, scheduling, technician assignments, and work orders.
+- Work order statuses and history.
+- Installation checklists, photos, materials used, test readings, and completion notes.
+- Customer acknowledgement where appropriate.
+- Mobile-friendly technician dashboard.
+- Installation completion must not silently bypass payment or activation rules.
+
+10. SUPPORT
+- Ticket categories, priorities, assignments, comments, attachments, and resolution history.
+- Separate customer-visible messages from internal notes.
+- Response and resolution targets, escalation, and overdue indicators.
+- Link tickets to customer connections and wider incidents.
+
+11. NETWORK MONITORING AND INCIDENTS
+- Device inventory, service checks, incident records, affected areas, and affected connections.
+- Planned maintenance and customer-facing outage notices.
+- Integration hooks for an external monitoring platform.
+- Display only measurements collected from actual sources.
+- Clearly distinguish a network incident from a billing suspension.
+
+12. INVENTORY
+- Equipment categories, models, serial numbers, MAC addresses, suppliers, purchase costs, and warranty dates.
+- Stock movements and assignments to technicians or customers.
+- Customer-owned, sold, rented, and loaned equipment.
+- Returns, replacements, faults, and recovery records.
+- Prevent conflicting assignments and duplicate serial numbers.
+
+13. NOTIFICATIONS
+- Email and SMS provider interfaces, plus extensible messaging support.
+- Templates for invoices, receipts, expiry reminders, installations, tickets, and incidents.
+- Queued delivery, retry handling, delivery logs, and duplicate prevention.
+- Customer communication preferences.
+- Local development delivery log when no provider is configured.
+
+14. REPORTING
+- Active, suspended, new, and cancelled connections.
+- Invoiced revenue, collections, balances, and ageing.
+- Revenue by package and area.
+- Renewals, churn, installation turnaround, ticket performance, and inventory.
+- Date filters and CSV exports.
+- Explain how each metric is calculated.
+- Do not present estimated uptime or revenue as measured facts.
+
+15. SETTINGS AND OPERATIONS
+- ISP branding, contact details, currency, timezone, billing rules, grace periods, and notification schedules.
+- Integration configuration with masked credentials.
+- Background job scheduler and queue worker.
+- Health checks for database, queue, payment configuration, and network adapters.
+- Backup and restoration instructions with a verified restoration procedure.
+- Configurable retention and safe account closure procedures.
+
+ARCHITECTURE AND DATA
+- Use a maintainable modular structure with separation of HTTP handling, business logic, persistence, and integrations.
+- Use versioned database migrations, foreign keys, appropriate indexes, unique constraints, and transactions.
+- Include customers, service connections, coverage areas, packages, package price history, subscriptions, invoices, invoice items, payments, allocations, credits, refunds, network devices, provisioning jobs, equipment, stock movements, work orders, tickets, incidents, notifications, roles, permissions, settings, and audit events as appropriate.
+- Use a transactional outbox or equivalent reliable mechanism so committed payment events can reliably trigger provisioning and notifications.
+- Store timestamps consistently and display them in Africa/Nairobi.
+- Keep uploaded files outside the public web root and serve them through authorized endpoints.
+- Use environment configuration and provide an .env.example without secrets.
+- Do not overwrite or delete existing customer data. Inspect and back up existing data before migrations that may change it.
+
+SECURITY
+- Secure password hashing, prepared statements or a safe ORM, CSRF protection, output escaping, input validation, and secure cookies.
+- Protect against broken access control, SQL injection, XSS, unsafe file uploads, and credential exposure.
+- Restrict upload types and sizes; generate server-side filenames.
+- Never log passwords, access tokens, or sensitive payment credentials.
+- Encrypt recoverable integration secrets using a key stored outside the database.
+- Audit sensitive actions without storing secrets in audit records.
+- Disable debug output in production.
+
+IMPLEMENTATION PROCESS
+1. Inspect the project and explain the existing state briefly.
+2. Create a persistent implementation checklist in the repository.
+3. Implement in working phases:
+   A. Foundation, database, authentication, roles, customers, and packages.
+   B. Subscriptions, invoices, payments, and customer portal.
+   C. M-Pesa and queued network provisioning.
+   D. Installations, tickets, inventory, notifications, and incidents.
+   E. Reports, security hardening, integration checks, and documentation.
+4. Complete each phase and run relevant checks before moving on.
+5. If the session limit is approaching, save a precise progress checkpoint with completed work, remaining tasks, commands, and known failures so the next session can continue.
+6. Do not replace unfinished functionality with buttons that falsely report success.
+7. Do not stop after scaffolding or a dashboard.
+
+VERIFICATION
+Test the important workflows, including:
+- Customer registration and unauthorized access attempts.
+- Correct invoice totals and payment allocations.
+- Partial payments and overpayments.
+- Duplicate and out-of-order M-Pesa callbacks.
+- Renewal date calculations and subscription expiry.
+- Payment success followed by router failure and later recovery.
+- Duplicate background jobs without duplicate effects.
+- Correct suspension and reconnection behaviour.
+- Technician access restrictions.
+- Upload authorization and validation.
+- Ticket lifecycle and equipment assignment consistency.
+
+Keep automated tests isolated from live payments, real network devices, and production data.
+
+DELIVERABLES
+- Working source code in the project.
+- Database migrations and separately runnable demonstration seed data.
+- .env.example.
+- README with installation instructions for my environment.
+- Background worker and scheduler setup.
+- M-Pesa sandbox and MikroTik configuration instructions.
+- Test commands and actual results.
+- Deployment, backup, restoration, and troubleshooting guidance.
+- A clear final checklist showing implemented features, verified features, and anything requiring external credentials or hardware.
+
+Begin by inspecting the repository, then implement NetConnect.
