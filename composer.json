@@ -1,0 +1,1 @@
+{"name":"netconnect/isp","description":"NetConnect ISP management","require":{"php":">=8.2","ext-pdo":"*","ext-pdo_mysql":"*","ext-mbstring":"*"},"scripts":{"test":"php tests/run.php"}}
